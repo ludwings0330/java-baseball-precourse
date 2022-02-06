@@ -12,11 +12,59 @@ public class BaseBallGame {
 
 
     public void play() {
+        int strike;
+        int ball;
+
         do {
             int playerInputNumber = getPlayerInputNumber();
-            System.out.println("playerInputNumber = " + playerInputNumber);
-        } while (true);
 
+            strike = countStrike(playerInputNumber);
+            ball = countBall(playerInputNumber, strike);
+
+        } while (!isGameOver(strike, ball));
+
+    }
+
+    private boolean isGameOver(int strike, int ball) {
+        if (strike == 3) {
+            System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 끝");
+            return true;
+        }
+
+        if (strike == 0 && ball == 0) {
+            System.out.println("낫싱");
+            return false;
+        }
+
+        System.out.println(strike + "스트라이크 " + ball +"볼");
+        return false;
+    }
+
+    private int countBall(int playerInputNumber, int strike) {
+        int ret = 0;
+        int tmpGameNumber = gameNumber;
+        while (tmpGameNumber > 0) {
+            int n = tmpGameNumber % 10;
+
+            ret += (n == playerInputNumber % 10 || n == playerInputNumber / 10 % 10 || n == playerInputNumber / 100) ? 1 : 0;
+            tmpGameNumber /= 10;
+        }
+
+        return ret - strike;
+    }
+
+    private int countStrike(int playerInputNumber) {
+        int ret = 0;
+        int tmpGameNumber = gameNumber;
+
+        while (tmpGameNumber > 0) {
+            ret += (tmpGameNumber % 10 == playerInputNumber % 10) ? 1 : 0;
+
+            tmpGameNumber /= 10;
+            playerInputNumber /= 10;
+        }
+
+        return ret;
     }
 
     private int getPlayerInputNumber() {
@@ -48,6 +96,7 @@ public class BaseBallGame {
             Integer.parseInt(playerInput);
         } catch (Exception e) {
             System.out.println("ERROR : 숫자를 입력해주세요");
+
             return false;
         }
 
@@ -58,15 +107,13 @@ public class BaseBallGame {
 
         do {
             setGameNumber(createGameNumber());
-            System.out.println("gameNumber is : " + gameNumber);
 
             play();
-
         } while (confirmRestart());
     }
 
     private boolean confirmRestart() {
-        System.out.println("게임르 새로 시작하려 1, 종료하려면 2를 입력하세요.");
+        System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
 
         String playerInput = Console.readLine();
 
