@@ -9,7 +9,16 @@ public class BaseBallGame {
     private final String RESTART = "1";
     private int gameNumber;
 
-    public void play() {
+    public void start() {
+
+        do {
+            setGameNumber(createGameNumber());
+
+            play();
+        } while (confirmRestart());
+    }
+
+    private void play() {
         int strike;
         int ball;
 
@@ -21,6 +30,41 @@ public class BaseBallGame {
 
         } while (!isGameOver(strike, ball));
 
+    }
+
+
+    private boolean confirmRestart() {
+        System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+
+        String playerInput = Console.readLine();
+
+        return playerInput.equals(RESTART) ? true : false;
+    }
+
+    private int createGameNumber() {
+        int pickedNumber;
+
+        do {
+            pickedNumber = Randoms.pickNumberInRange(RANGE_START, RANGE_END);
+        } while (!isValidNumber(pickedNumber));
+
+        return pickedNumber;
+    }
+
+    private void setGameNumber(int pickedNumber) {
+        this.gameNumber = pickedNumber;
+    }
+
+    private boolean isValidNumber(int checkNumber) {
+        int first = checkNumber / 100;
+        int second = (checkNumber / 10) % 10;
+        int third = checkNumber % 10;
+
+        if (checkNumber > 999 || first == 0 || second == 0 || third == 0 || first == second || second == third || first == third) {
+            return false;
+        }
+
+        return true;
     }
 
     private boolean isGameOver(int strike, int ball) {
@@ -100,46 +144,4 @@ public class BaseBallGame {
         return true;
     }
 
-    public void start() {
-
-        do {
-            setGameNumber(createGameNumber());
-
-            play();
-        } while (confirmRestart());
-    }
-
-    private boolean confirmRestart() {
-        System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
-
-        String playerInput = Console.readLine();
-
-        return playerInput.equals(RESTART) ? true : false;
-    }
-
-    public int createGameNumber() {
-        int pickedNumber;
-
-        do {
-            pickedNumber = Randoms.pickNumberInRange(RANGE_START, RANGE_END);
-        } while (!isValidNumber(pickedNumber));
-
-        return pickedNumber;
-    }
-
-    public void setGameNumber(int pickedNumber) {
-        this.gameNumber = pickedNumber;
-    }
-
-    public boolean isValidNumber(int checkNumber) {
-        int first = checkNumber / 100;
-        int second = (checkNumber / 10) % 10;
-        int third = checkNumber % 10;
-
-        if (checkNumber > 999 || first == 0 || second == 0 || third == 0 || first == second || second == third || first == third) {
-            return false;
-        }
-
-        return true;
-    }
 }
