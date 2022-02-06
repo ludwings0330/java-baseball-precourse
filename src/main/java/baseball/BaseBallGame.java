@@ -9,8 +9,6 @@ public class BaseBallGame {
     private final String RESTART = "1";
     private int gameNumber;
 
-
-
     public void play() {
         int strike;
         int ball;
@@ -41,16 +39,16 @@ public class BaseBallGame {
     }
 
     private int countBall(int playerInputNumber, int strike) {
-        int ret = 0;
+        int numberOfMatches = 0;
         int tmpGameNumber = gameNumber;
         while (tmpGameNumber > 0) {
             int n = tmpGameNumber % 10;
 
-            ret += (n == playerInputNumber % 10 || n == playerInputNumber / 10 % 10 || n == playerInputNumber / 100) ? 1 : 0;
+            numberOfMatches += (n == playerInputNumber % 10 || n == playerInputNumber / 10 % 10 || n == playerInputNumber / 100) ? 1 : 0;
             tmpGameNumber /= 10;
         }
 
-        return ret - strike;
+        return numberOfMatches - strike;
     }
 
     private int countStrike(int playerInputNumber) {
@@ -80,6 +78,7 @@ public class BaseBallGame {
 
     private boolean isValidPlayerInput(String playerInput) {
         if (!isNumber(playerInput)) {
+            System.out.println("ERROR : 숫자를 입력해주세요 ");
             return false;
         }
 
@@ -95,8 +94,6 @@ public class BaseBallGame {
         try {
             Integer.parseInt(playerInput);
         } catch (Exception e) {
-            System.out.println("ERROR : 숫자를 입력해주세요");
-
             return false;
         }
 
