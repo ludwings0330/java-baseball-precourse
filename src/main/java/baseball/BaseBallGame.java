@@ -16,8 +16,11 @@ public class BaseBallGame {
 
     public void start() {
         do {
+            System.out.println("새로운 게임을 시작합니다.");
             play();
         } while (askRestart());
+
+        System.out.println("게임을 종료합니다.");
     }
 
     private void play() {
@@ -28,9 +31,16 @@ public class BaseBallGame {
     }
 
     private boolean askRestart() {
-        System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+        String playerInput = null;
 
-        String playerInput = Console.readLine();
+        do {
+            if (playerInput != null) {
+                System.out.println("[ERROR] 잘못된 입력입니다.");
+            }
+
+            System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+            playerInput = Console.readLine();
+        } while (!playerInput.equals(GameCode.END.getCode()) && !playerInput.equals(GameCode.RESTART.getCode()));
 
         return playerInput.equals(GameCode.RESTART.getCode());
     }
